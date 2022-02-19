@@ -23,29 +23,29 @@ contract BloodOfMoloch is ERC1155, Ownable, Pausable {
         tokenUri[REDEEM_TOKEN_ID] = _redeemUri;
     }
 
-    modifier brewCompliance() {
-        require(brewsCount + redeemsCount < MAX_BREWS, "Max brews made.");
+    modifier brewCompliance(uint256 _amount) {
+        require(brewsCount + redeemsCount + _amount <= MAX_BREWS, "Max brews made.");
         require(msg.value == BREW_PRICE, "Invalid value sent.");
         _;
     }
 
-    modifier redeemCompliance() {
+    modifier redeemCompliance(uint256 _amount) {
         require(!paused(), "Redemption is paused.");
         require(block.timestamp >= redemptionStartDate, "Redemption not begun.");
-        require(balanceOf(msg.sender, 1) >= 1, "Not enough balance.");
+        require(balanceOf(msg.sender, 1) >= _amount, "Not enough balance.");
         _;
     }
 
-    function brewOne() payable public brewCompliance {
-        _mint(msg.sender, BREW_TOKEN_ID, 1, '');
-        brewsCount += 1;
+    function brew(uint256 _amount) payable public brewCompliance(_amount) {
+        _mint(msg.sender, BREW_TOKEN_ID, _amount, '');
+        brewsCount += _amount;
     }
 
-    function redeemOne() public redeemCompliance {
-        _burn(msg.sender, BREW_TOKEN_ID, 1);
-        _mint(msg.sender, REDEEM_TOKEN_ID, 1, '');
-        brewsCount -= 1;
-        redeemsCount += 1;
+    function redeem(uint256 _amount) public redeemCompliance(_amount) {
+        _burn(msg.sender, BREW_TOKEN_ID, _amount);
+        _mint(msg.sender, REDEEM_TOKEN_ID, _amount, '');
+        brewsCount -= _amount;
+        redeemsCount += _amount;
     }
 
     function uri(uint256 _id) public view virtual override returns (string memory) {
