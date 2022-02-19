@@ -14,12 +14,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const BOM = await hre.ethers.getContractFactory('BOM');
-  const bom = await BOM.deploy('MINT_URI');
+  const BloodOfMoloch = await hre.ethers.getContractFactory('BloodOfMoloch');
+  const bloodOfMoloch = await BloodOfMoloch.deploy('brew uri', 'redeem uri');
 
-  await bom.deployed();
+  await bloodOfMoloch.deployed();
 
-  console.log('Blood of Moloch NFT deployed to:', bom.address);
+  console.log('Blood of Moloch NFT deployed to:', bloodOfMoloch.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

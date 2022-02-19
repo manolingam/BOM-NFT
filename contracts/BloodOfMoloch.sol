@@ -20,7 +20,7 @@ contract BloodOfMoloch is ERC1155, Ownable, Pausable {
 
     constructor(string memory _brewUri, string memory _redeemUri) ERC1155(_brewUri) {
         tokenUri[BREW_TOKEN_ID] = _brewUri;
-        tokenUri[REDEEM_TOKEN_ID] = bytes(_redeemUri).length > 0 ? _redeemUri : "";
+        tokenUri[REDEEM_TOKEN_ID] = _redeemUri;
     }
 
     modifier brewCompliance() {
