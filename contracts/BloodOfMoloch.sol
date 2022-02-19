@@ -25,14 +25,14 @@ contract BloodOfMoloch is ERC1155, Ownable, Pausable {
 
     modifier brewCompliance(uint256 _amount) {
         require(brewsCount + redeemsCount + _amount <= MAX_BREWS, "Max brews made.");
-        require(msg.value == BREW_PRICE, "Invalid value sent.");
+        require(msg.value == BREW_PRICE * _amount, "Invalid value sent.");
         _;
     }
 
     modifier redeemCompliance(uint256 _amount) {
         require(!paused(), "Redemption is paused.");
         require(block.timestamp >= redemptionStartDate, "Redemption not begun.");
-        require(balanceOf(msg.sender, 1) >= _amount, "Not enough balance.");
+        require(balanceOf(msg.sender, BREW_TOKEN_ID) >= _amount, "Not enough balance.");
         _;
     }
 
